@@ -27,3 +27,18 @@
 *.exe
 *.out
 *.app
+
+# Text editor (e.g. emacs) autosave files
+*~
+
+# CMake generated files (if someone does an in-source build)
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+# Compiled python files
+*.py[cod]
+__pycache__/
