@@ -3,7 +3,7 @@ Contains prototypes for evaluating future plotting packages in Mantid
 
 Examples to implement in each package:
 
-1. Make a plot of a 1D function that contains NaNs and shows error bars. The NaN values should be plotted as the highest double value (follows MantidPlot's current behaviour)  
+1. Make a plot of a 1D function that contains NaNs and shows error bars. 
 2. Make a plot of a 1D function in window 1, then in window 2, then come back in window 1 and add another curve to the plot
 3. Make a 1D plot. Then change axis title and min/max. Title should contain something like micro, angstroms, and ^{-1}, maybe hbar
 4. On a 1D plot, be able to click at a certain position and it should be able to transform that position into data coordinates (we need this for fitting and for reading data)
