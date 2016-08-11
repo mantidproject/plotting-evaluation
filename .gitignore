@@ -39,6 +39,9 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 
+# CMake QtCreator files
+**/CMakeLists.txt.user
+
 # Compiled python files
 *.py[cod]
 __pycache__/
