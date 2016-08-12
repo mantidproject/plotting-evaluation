@@ -12,7 +12,7 @@ public:
                                       std::size_t npoints, const FuncY &ygen,
                                       const FuncDy & dygen) const {
     std::unique_ptr<Spectrum> curve(new Spectrum(npoints));
-    const double dx = (xmax - xmin) / static_cast<double>(npoints);
+    const double dx = (xmax - xmin) / static_cast<double>(npoints - 1);
     // Fill vectors
     double xvalue = xmin;
     std::generate_n(std::begin(curve->x), npoints, [&xvalue, dx]() {
