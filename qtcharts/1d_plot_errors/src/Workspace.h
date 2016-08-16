@@ -15,8 +15,10 @@ using SpectrumVector = std::vector<std::unique_ptr<Spectrum>>;
 
 class Workspace {
 public:
-  /// Access
+  /// Const access
   const Spectrum &operator[](const std::size_t index) const;
+  /// Non-const access
+  Spectrum &operator[](const std::size_t index);
 
   /// Modification
   void push_back(std::unique_ptr<Spectrum> spectrum);
