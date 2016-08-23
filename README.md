@@ -12,3 +12,4 @@ Examples to implement in each package:
 7. Print all graphics in a window to a file, say pdf
 8. Make a 2D contour with some area masked (say a Gaussian in 2D with a wedge changed to NaNs)
 9. Make a 2D plot with non orthogonal axes
+
