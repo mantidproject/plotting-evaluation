@@ -5,6 +5,32 @@ from PyQt4 import QtGui, QtCore
 import plot_window
 import function_generator
 
+MplLineMarkers = [
+    ". (point         )",
+    "* (star          )",
+    "x (x             )",
+    "o (circle        )",
+    "s (square        )",
+    "D (diamond       )",
+    ", (pixel         )",
+    "None (nothing    )",
+    "v (triangle_down )",
+    "^ (triangle_up   )",
+    "< (triangle_left )",
+    "> (triangle_right)",
+    "1 (tri_down      )",
+    "2 (tri_up        )",
+    "3 (tri_left      )",
+    "4 (tri_right     )",
+    "8 (octagon       )",
+    "p (pentagon      )",
+    "h (hexagon1      )",
+    "H (hexagon2      )",
+    "+ (plus          )",
+    "d (thin_diamond  )",
+    "| (vline         )",
+    "_ (hline         )"]
+
 
 class EvaluationMain(QtGui.QMainWindow):
     """
@@ -31,11 +57,45 @@ class EvaluationMain(QtGui.QMainWindow):
         # Task 3
         self.connect(self.ui.pushButton_setTitle, QtCore.SIGNAL('clicked()'),
                      self.do_set_x_title)
+        for marker in MplLineMarkers:
+            self.ui.comboBox_lineSymbol.addItem(marker)
+
+        # Task 6
+        self.connect(self.ui.pushButton_addCurve, QtCore.SIGNAL('clicked()'),
+                     self.do_add_curve)
+        self.connect(self.ui.pushButton_setLineMarker, QtCore.SIGNAL('clicked()'),
+                     self.do_set_marker)
 
         # Class variables
         self._plotWindowDict = dict()
-        self.plot_counter = 0
         self._activePlotWindowName = None
+        self.plot_counter = 0
+
+        return
+
+    def do_add_curve(self):
+        """
+
+        Returns:
+
+        """
+        # create curve
+        curve_type = str(self.ui.comboBox_functionList.currentText())
+        if curve_type == 'Gaussian':
+            function_index = 3
+        elif curve_type == 'Sin':
+            function_index = 0
+        elif curve_type == 'Cosine':
+            function_index = 4
+        else:
+            raise RuntimeError('Unsupported function %s' % curve_type)
+
+        vec_x, vec_y = function_generator.function_generator(function_index, 0, 0.5, 10.)
+        title = str(self.ui.lineEdit_title.text())
+
+        # plot
+        self._plotWindowDict[self._activePlotWindowName].plot(vec_x, vec_y, title=title)
+        self._update_line_id_list()
 
         return
 
@@ -67,6 +127,42 @@ class EvaluationMain(QtGui.QMainWindow):
         self.plot_counter += 1
         self._activePlotWindowName = sub_plot_name
         self.write_note(sub_plot_name, append=True)
+
+        # modify combo
+        self._update_line_id_list()
+
+        return
+
+    def _update_line_id_list(self):
+        """
+
+        Returns:
+
+        """
+        self.ui.comboBox_lines.clear()
+
+        line_id_list = self._plotWindowDict[self._activePlotWindowName].get_line_ids()
+        for line_id in line_id_list:
+            print 'Type of Line ID: ', type(line_id)
+            self.ui.comboBox_lines.addItem(str(line_id))
+
+        return
+
+    def do_set_marker(self):
+        """
+        Set line marker
+        Returns:
+
+        """
+        # marker
+        marker = str(self.ui.comboBox_lineSymbol.currentText())
+        marker = marker.split('(')[0].strip()
+
+        # line ID
+        line_id = str(self.ui.comboBox_lines.currentText())
+
+        #
+        self._plotWindowDict[self._activePlotWindowName].set_line_marker(line_id, marker)
 
         return
 
@@ -137,6 +233,8 @@ class EvaluationMain(QtGui.QMainWindow):
 
         """
         self._activePlotWindowName = window_name
+
+        self._update_line_id_list()
 
     def write_mouse_position(self, x, y):
         """

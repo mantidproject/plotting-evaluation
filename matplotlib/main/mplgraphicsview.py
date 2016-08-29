@@ -859,6 +859,22 @@ class MplGraphicsView(QtGui.QWidget):
 
         return
 
+    def set_line_marker(self, line_id, marker):
+        """
+
+        Args:
+            line_id:
+            marker:
+
+        Returns:
+
+        """
+        # get the hold of line
+        self._myCanvas.update_marker(line_id, marker)
+
+        return
+
+
     def setLineMarkerColorIndex(self, newindex):
         """
         """
@@ -1239,6 +1255,24 @@ class Qt4MplCanvas(FigureCanvas):
             raise RuntimeError('Line with ID %s is not recorded.' % plot_key)
 
         # Draw
+        self.draw()
+
+        return
+
+    def update_marker(self, line_id, marker):
+        """
+
+        Args:
+            line_id:
+            marker:
+
+        Returns:
+
+        """
+        line = self._lineDict[line_id]
+
+        line.set_marker(marker)
+
         self.draw()
 
         return

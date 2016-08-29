@@ -26,6 +26,8 @@ class PlotWindow(QtGui.QMainWindow):
 
         self._myParentWindow = parent
 
+        self._lineIDList = list()
+
         return
 
     # override
@@ -144,7 +146,15 @@ class PlotWindow(QtGui.QMainWindow):
 
         print '%s: Lost focus' % self._name
 
-    def plot(self, vec_x, vec_y):
+    def get_line_ids(self):
+        """
+
+        Returns:
+
+        """
+        return self._lineIDList[:]
+
+    def plot(self, vec_x, vec_y, title=None):
         """
 
         Args:
@@ -154,9 +164,26 @@ class PlotWindow(QtGui.QMainWindow):
         Returns:
 
         """
-        self.ui.graphicsView.add_plot_1d(vec_x, vec_y, label='dd dd dd')
+        if title is None:
+            title = 'Default'
+        line_id = self.ui.graphicsView.add_plot_1d(vec_x, vec_y, label=title)
 
-        return
+        self._lineIDList.append(line_id)
+
+        return line_id
+
+    def set_line_marker(self, line_id, marker):
+        """
+
+        Args:
+            line_id:
+            marker:
+
+        Returns:
+
+        """
+        line_id = int(line_id)
+        self.ui.graphicsView.set_line_marker(line_id, marker)
 
     def set_x_title(self, title):
         """

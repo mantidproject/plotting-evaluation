@@ -17,19 +17,25 @@ def function_generator(index, x_min, d_x, x_max):
     vec_x = np.arange(x_min, x_max, d_x)
 
     # calculate y
-    index %= 4
+    index %= 5
 
     if index == 0:
+        # sin
         vec_y = np.sin(vec_x)
 
     elif index == 1:
         vec_y = np.exp(vec_x)
 
-    elif index == 3:
+    elif index == 2:
         vec_y = 2*vec_x
 
-    else:
+    elif index == 3:
+        # gaussian
         vec_y = np.exp(-(vec_x-5)**2*0.01)
+
+    else:
+        # cosine
+        vec_y = np.cos(vec_x)
 
     return vec_x, vec_y
 
