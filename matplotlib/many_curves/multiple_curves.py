@@ -85,11 +85,11 @@ def plot(curves, errors=True):
 
 def main(argv):
     ncurves, npts, error_bars = parse_args(sys.argv)
-    xbar = 0.0
+    xbar = -0.5
     curves = []
     for i in range(ncurves):
         curves.append(create_test_data(npts, xbar=xbar))
-        xbar += 0.1
+        xbar += 0.01
     plot(curves, errors=error_bars)
 
 
