@@ -27,6 +27,7 @@ Z_VALUES = np.loadtxt('colofill-zdata.txt')
 # ------------------------------------------------------------------------------
 class MainWindow(QMainWindow, Ui_MainWindow):
 
+    _miniplot_lines = None
     _image_canvas = None
     _miniplot_canvas = None
 
@@ -42,6 +43,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.outer_layout.addWidget(self._miniplot_canvas)
         self.outer_layout.addWidget(self._image_canvas)
 
+        self.mpl_connect()
+
     def _create_image(self, x, y, z):
         fig = Figure()
         axes = fig.add_subplot(111)
@@ -54,10 +57,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _create_miniplot(self, x, signal):
         fig = Figure()
         axes = fig.add_subplot(111)
-        axes.plot(x, signal)
+        self._miniplot_lines = axes.plot(x, signal)
         self._miniplot_canvas = FigureCanvas(fig)
         self._miniplot_canvas.draw()
         return fig
+
+    def _update_miniplot(self,y_index):
+        ax1 = self._miniplot_lines[0]
+        if y_index >= Y_AXIS.shape[0]:
+            ax1.clear()
+        else:
+            ax1.set_ydata(Z_VALUES[y_index])
+        self._miniplot_canvas.draw()
+
+    def mpl_connect(self):
+        self._cid_move = self._image_canvas.mpl_connect('motion_notify_event',
+                                                        self._on_mousemove)
+    def mpl_disconnect(self):
+        self._canvas.mpl_disconnect(self.cid_move)
+
+    def _on_mousemove(self, event):
+        ydata = event.ydata
+        if ydata is None:
+            return
+        # Need to figure out the correct "spectrum" to plot
+        # Take the floor of the y position
+        y_index = int(np.floor(ydata))
+        self._update_miniplot(y_index)
 
 # ------------------------------------------------------------------------------
 
